@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { MapPin, Mail, Clock, Send } from 'lucide-react';
+import { Mail, Clock, Send } from 'lucide-react';
 import Breadcrumbs from '../components/ui/Breadcrumbs';
 import SEO from '../components/seo/SEO';
 import { complaintSubmitApi } from '../api/client';
@@ -41,7 +41,6 @@ export default function Contact() {
           <h1 className="text-3xl font-extrabold">Let&apos;s talk</h1>
           <p className="text-ink-500">Have a question about an order, return, or wholesale enquiry? Our team replies fast.</p>
           {[
-            { i: MapPin, t: 'Visit us', d: 'Near Sherreen Masjid, Main Bazar, Kharian, Punjab' },
             { i: Mail,   t: 'Email us', d: BUSINESS.email, href: `mailto:${BUSINESS.email}` },
             { i: Clock,  t: 'Hours',    d: 'Mon - Sun, 10:00 AM to 10:00 PM' }
           ].map((c) => (
@@ -57,15 +56,6 @@ export default function Contact() {
               </div>
             </div>
           ))}
-
-          <div className="card overflow-hidden">
-            <iframe
-              title="Maxx - Main Bazar Kharian"
-              src="https://www.google.com/maps?q=Main+Bazar+Kharian,Pakistan&output=embed"
-              className="w-full h-64 border-0"
-              loading="lazy"
-            />
-          </div>
         </div>
 
         <form onSubmit={submit} className="card p-6 space-y-4">

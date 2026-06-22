@@ -20,7 +20,7 @@ export default function About() {
               From Kharian, with love - quality you can trust.
             </h1>
             <p className="mt-4 text-ink-700 dark:text-ink-200 max-w-xl">
-              Maxx began as a family-run store near Sherreen Masjid in Main Bazar, Kharian,
+              Maxx began as a family-run business in Kharian,
               serving thousands of loyal customers across Punjab. Today we bring that same care online -
               curating premium kitchen, electronics, beauty and home essentials at honest prices, with fast
               cash-on-delivery across Pakistan.
@@ -66,15 +66,13 @@ export default function About() {
 
       <section className="container-px pb-16">
         <div className="rounded-3xl bg-brand-gradient text-white p-8 sm:p-12 text-center">
-          <h2 className="text-2xl sm:text-3xl font-extrabold">Visit our flagship in Kharian</h2>
-          <p className="mt-2 text-white/90">Near Sherreen Masjid, Main Bazar, Kharian - open 7 days, 10am to 10pm.</p>
+          <h2 className="text-2xl sm:text-3xl font-extrabold">Shop with Maxx</h2>
+          <p className="mt-2 text-white/90">Premium products delivered to your door with fast cash-on-delivery across Pakistan.</p>
           <a
-            href="https://maps.google.com/?q=Main+Bazar+Kharian,Pakistan"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/shop"
             className="btn mt-5 bg-white text-brand-700 hover:bg-brand-50"
           >
-            Open in Google Maps
+            Browse Products
           </a>
         </div>
       </section>

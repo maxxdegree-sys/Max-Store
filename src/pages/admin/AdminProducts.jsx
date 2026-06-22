@@ -13,7 +13,7 @@ import ProductSeoBox from '../../components/admin/ProductSeoBox';
 import StorefrontTagsEditor from '../../components/admin/StorefrontTagsEditor';
 import { productSeoScore, seoBadgeClass } from '../../utils/productSeo';
 
-const empty = { id: '', title: '', price: 0, mrp: 0, stock: 0, category: 'electronics', subcategory: '', brand: '', vendorId: null, images: [''], short: '', description: '', specs: {}, rating: 4.5, reviews: 0, sold: 0, tags: [], seo: {} };
+const empty = { id: '', title: '', price: 0, mrp: 0, stock: 0, category: 'electronics', subcategory: '', brand: '', vendorId: null, images: [''], short: '', description: '', specs: {}, rating: 4.5, reviews: 0, sold: 0, tags: [], seo: {}, status: 'active' };
 
 export default function AdminProducts() {
   const list = useSelector(selectAllProducts);
@@ -56,6 +56,17 @@ export default function AdminProducts() {
       toast.success(newRank === null ? 'Rank cleared' : 'Rank saved');
     } catch (err) {
       toast.error(err.message || 'Could not save rank. Make sure you are signed in with product access.');
+    }
+  };
+
+  const saveStatus = async (p) => {
+    const next = p.status === 'active' ? 'draft' : 'active';
+    try {
+      const r = await productUpdateApi(p.id, { status: next });
+      dispatch(updateProduct(r?.product || { ...p, status: next }));
+      toast.success(next === 'active' ? 'Published — now live on store' : 'Set to draft — hidden from store');
+    } catch (err) {
+      toast.error(err.message || 'Could not change status. Make sure you are signed in with product access.');
     }
   };
 
@@ -102,7 +113,7 @@ export default function AdminProducts() {
           <table className="w-full text-sm">
             <thead className="bg-ink-100/60 dark:bg-white/5 text-left">
               <tr>
-                {['Rank', 'Product', 'Sections', 'Category', 'Brand', 'Vendor', 'Price', 'Stock', 'Rating', 'SEO', ''].map((h) => <th key={h} className="px-4 py-3 text-xs uppercase tracking-wider font-bold text-ink-500">{h}</th>)}
+                {['Rank', 'Product', 'Status', 'Sections', 'Category', 'Brand', 'Vendor', 'Price', 'Stock', 'Rating', 'SEO', ''].map((h) => <th key={h} className="px-4 py-3 text-xs uppercase tracking-wider font-bold text-ink-500">{h}</th>)}
               </tr>
             </thead>
             <tbody>
@@ -126,6 +137,16 @@ export default function AdminProducts() {
                       <img src={p.images[0]} alt="" className="w-10 h-10 rounded-lg object-cover" />
                       <div className="font-medium line-clamp-1">{p.title}</div>
                     </div>
+                  </td>
+                  <td className="px-4 py-3">
+                    <button
+                      type="button"
+                      onClick={() => saveStatus(p)}
+                      title={p.status === 'active' ? 'Live on store — click to set draft (hide)' : 'Draft — click to publish (show on store)'}
+                      className={`badge cursor-pointer transition ${p.status === 'active' ? 'bg-brand-50 text-brand-700 ring-1 ring-brand-200' : 'bg-amber-50 text-amber-700 ring-1 ring-amber-200'}`}
+                    >
+                      {p.status === 'active' ? 'Active' : 'Draft'}
+                    </button>
                   </td>
                   <td className="px-4 py-3 min-w-[140px]">
                     <StorefrontTagsEditor
@@ -180,6 +201,13 @@ export default function AdminProducts() {
               <Input label="MRP (PKR)"   type="number" value={editing.mrp}   onChange={(v) => setEditing({ ...editing, mrp: +v })} />
               <Input label="Stock"       type="number" value={editing.stock} onChange={(v) => setEditing({ ...editing, stock: +v })} />
               <Input label="Units sold"  type="number" value={editing.sold ?? 0} onChange={(v) => setEditing({ ...editing, sold: +v })} title="Updated automatically when orders are delivered; editable for corrections." />
+              <label className="text-sm"><div className="font-semibold mb-1">Status</div>
+                <select className="input" value={editing.status || 'active'} onChange={(e) => setEditing({ ...editing, status: e.target.value })}>
+                  <option value="active">Active (live on store)</option>
+                  <option value="draft">Draft (hidden)</option>
+                  <option value="archived">Archived</option>
+                </select>
+              </label>
               <label className="text-sm"><div className="font-semibold mb-1">Category</div>
                 <select className="input" value={editing.category} onChange={(e) => setEditing({ ...editing, category: e.target.value, subcategory: '' })}>
                   {categories.map((c) => <option key={c.id} value={c.slug}>{c.name}</option>)}

@@ -80,7 +80,7 @@ export function buildProductDescription(p = {}) {
     `The ${title} from ${brand} is a top choice for shoppers looking for ${focus} with reliable quality and value. Ideal for ${catLabel.toLowerCase()} needs across Pakistani homes.`,
     specParagraph(p),
     price > 0 ? `Available at ${formatPKR(price)} with Cash on Delivery and fast shipping across Pakistan including Lahore, Karachi, Islamabad and Kharian.` : 'Available with Cash on Delivery and fast shipping across Pakistan.',
-    'Maxx offers genuine products, easy returns on eligible items, and friendly support by email. Order online today or visit our Kharian store.'
+    'Maxx offers genuine products, easy returns on eligible items, and friendly support by email. Order online today for fast delivery across Pakistan.'
   ].filter(Boolean).join('\n\n');
 }
 

@@ -9,7 +9,7 @@ import { apiLogin } from '../../api/client';
 import Logo from '../../components/ui/Logo';
 
 export default function AdminLogin() {
-  const [email, setEmail] = useState('Alrafiqshopping56@gmail.com');
+  const [email, setEmail] = useState('');
   const [pwd, setPwd] = useState('');
   const [busy, setBusy] = useState(false);
   const dispatch = useDispatch();
@@ -76,7 +76,7 @@ export default function AdminLogin() {
           <Shield size={16} /> {busy ? 'Signing in...' : 'Secure Sign-in'}
         </button>
         <p className="mt-4 text-[11px] text-ink-500 text-center leading-relaxed">
-          Restricted area. Default executive: Alrafiqshopping56@gmail.com / alrafiq123
+          Restricted area. Authorized personnel only.
         </p>
         <p className="mt-2 text-xs text-center text-ink-500">
           <Link to="/" className="text-brand-700 font-semibold hover:underline">Storefront</Link>

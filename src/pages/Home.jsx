@@ -10,6 +10,7 @@ import SEO from '../components/seo/SEO';
 import { useSelector } from 'react-redux';
 import { selectFeatured, selectTrending, selectNewArrivals, selectBestSellers } from '../store/productsSlice';
 import { selectHomepageConfig } from '../store/settingsSlice';
+import { resolveHomeOrder } from '../constants/homeBlocks';
 
 export default function Home() {
   const featured = useSelector(selectFeatured);
@@ -18,6 +19,53 @@ export default function Home() {
   const best = useSelector(selectBestSellers);
   const hp = useSelector(selectHomepageConfig);
   const sections = hp.sections || {};
+
+  // Each re-orderable block renders via its key. Product rows also honor their
+  // enabled toggle from the "Homepage Product Rows" settings.
+  const blocks = {
+    categories:   () => <CategoryGrid />,
+    flashSale:    () => <FlashSale />,
+    promoBanners: () => <PromoBanners />,
+    whyChooseUs:  () => <WhyChooseUs />,
+    testimonials: () => <Testimonials />,
+    newsletter:   () => <Newsletter />,
+    featured: () => sections.featured?.enabled !== false && (
+      <ProductRow
+        eyebrow="Hand-picked"
+        title="Featured Products"
+        subtitle="Our editors' top picks this week."
+        products={featured}
+        viewAll="/shop?tag=featured"
+      />
+    ),
+    trending: () => sections.trending?.enabled !== false && (
+      <ProductRow
+        eyebrow="Hot right now"
+        title="Trending Products"
+        products={trending}
+        viewAll="/shop?tag=trending"
+      />
+    ),
+    newArrivals: () => sections.newArrivals?.enabled !== false && (
+      <ProductRow
+        eyebrow="Just landed"
+        title="New Arrivals"
+        products={newArrivals}
+        viewAll="/shop?tag=new-arrival"
+      />
+    ),
+    bestSellers: () => sections.bestSellers?.enabled !== false && (
+      <ProductRow
+        eyebrow="Loved by thousands"
+        title="Best Sellers"
+        products={best}
+        viewAll={hp.bestSellersMode === 'auto' ? '/shop?sort=best-selling' : '/shop?tag=best-seller'}
+      />
+    )
+  };
+
+  const order = resolveHomeOrder(hp.order);
+
   return (
     <>
       <SEO
@@ -26,45 +74,10 @@ export default function Home() {
         url="https://alrafiq.pk/"
       />
       <HeroSlider />
-      <CategoryGrid />
-      {sections.featured?.enabled !== false && (
-        <ProductRow
-          eyebrow="Hand-picked"
-          title="Featured Products"
-          subtitle="Our editors' top picks this week."
-          products={featured}
-          viewAll="/shop?tag=featured"
-        />
-      )}
-      <FlashSale />
-      {sections.trending?.enabled !== false && (
-        <ProductRow
-          eyebrow="Hot right now"
-          title="Trending Products"
-          products={trending}
-          viewAll="/shop?tag=trending"
-        />
-      )}
-      <PromoBanners />
-      {sections.newArrivals?.enabled !== false && (
-        <ProductRow
-          eyebrow="Just landed"
-          title="New Arrivals"
-          products={newArrivals}
-          viewAll="/shop?tag=new-arrival"
-        />
-      )}
-      {sections.bestSellers?.enabled !== false && (
-        <ProductRow
-          eyebrow="Loved by thousands"
-          title="Best Sellers"
-          products={best}
-          viewAll={hp.bestSellersMode === 'auto' ? '/shop?sort=best-selling' : '/shop?tag=best-seller'}
-        />
-      )}
-      <WhyChooseUs />
-      <Testimonials />
-      <Newsletter />
+      {order.map((key) => {
+        const render = blocks[key];
+        return render ? <div key={key}>{render()}</div> : null;
+      })}
     </>
   );
 }

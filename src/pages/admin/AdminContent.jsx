@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
-import { Plus, Trash2, Save, Megaphone, Quote, Flame, BarChart3, LayoutGrid } from 'lucide-react';
+import { Plus, Trash2, Save, Megaphone, Quote, Flame, BarChart3, LayoutGrid, ChevronUp, ChevronDown } from 'lucide-react';
 import { siteSettingsApi, siteSettingsSaveApi } from '../../api/client';
 import { setSiteSettings } from '../../store/settingsSlice';
 import { STOREFRONT_TAGS } from '../../constants/storefrontTags';
+import { HOME_BLOCKS, DEFAULT_HOME_ORDER, resolveHomeOrder } from '../../constants/homeBlocks';
 
 const ICON_OPTIONS = ['Sparkles', 'Truck', 'Phone', 'Tag', 'Gift', 'Star', 'Percent', 'Clock'];
 
@@ -38,13 +39,24 @@ export default function AdminContent() {
 
   const flash = site.flashSale || {};
   const about = site.about || {};
-  const homepage = { sectionLimit: 8, bestSellersMode: 'manual', sections: { featured: { enabled: true }, trending: { enabled: true }, newArrivals: { enabled: true }, bestSellers: { enabled: true } }, ...(site.homepage || {}) };
+  const homepage = { sectionLimit: 8, bestSellersMode: 'manual', order: DEFAULT_HOME_ORDER, sections: { featured: { enabled: true }, trending: { enabled: true }, newArrivals: { enabled: true }, bestSellers: { enabled: true } }, ...(site.homepage || {}) };
   const hpSections = homepage.sections || {};
 
-  const patchHomepage = (patch) => patch('homepage', { ...homepage, ...patch });
+  const patchHomepage = (changes) => patch('homepage', { ...homepage, ...changes });
   const patchHpSection = (key, field, val) => patchHomepage({
     sections: { ...hpSections, [key]: { ...hpSections[key], [field]: val } }
   });
+
+  // Section ordering on the homepage
+  const blockLabel = Object.fromEntries(HOME_BLOCKS.map((b) => [b.key, b.label]));
+  const homeOrder = resolveHomeOrder(homepage.order);
+  const moveBlock = (index, dir) => {
+    const target = index + dir;
+    if (target < 0 || target >= homeOrder.length) return;
+    const next = [...homeOrder];
+    [next[index], next[target]] = [next[target], next[index]];
+    patchHomepage({ order: next });
+  };
 
   const save = async () => {
     if (saving) return;
@@ -146,6 +158,20 @@ export default function AdminContent() {
               Show {label}
             </label>
           ))}
+        </div>
+        <div>
+          <div className="font-semibold text-sm mb-1">Section order</div>
+          <p className="text-xs text-ink-500 mb-2">Use the arrows to set the order sections appear on the homepage (top = first). The hero banner always stays at the top. Disabled product rows are skipped automatically.</p>
+          <ul className="space-y-1">
+            {homeOrder.map((key, i) => (
+              <li key={key} className="flex items-center gap-2 rounded-lg border border-ink-100 dark:border-white/10 p-2">
+                <span className="grid place-items-center w-6 h-6 rounded bg-brand-50 text-brand-700 text-xs font-bold">{i + 1}</span>
+                <span className="text-sm font-medium flex-1">{blockLabel[key] || key}</span>
+                <button type="button" onClick={() => moveBlock(i, -1)} disabled={i === 0} className="btn-ghost !p-1.5 disabled:opacity-30" aria-label="Move up"><ChevronUp size={16} /></button>
+                <button type="button" onClick={() => moveBlock(i, 1)} disabled={i === homeOrder.length - 1} className="btn-ghost !p-1.5 disabled:opacity-30" aria-label="Move down"><ChevronDown size={16} /></button>
+              </li>
+            ))}
+          </ul>
         </div>
         <div className="text-xs text-ink-500 space-y-1">
           {STOREFRONT_TAGS.map((t) => (

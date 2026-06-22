@@ -9,14 +9,16 @@ function sleep(ms) {
 }
 
 // Neon pooler + idle disconnects can leave stale sockets in the pool.
+// Transient DNS failures (EAI_AGAIN / ENOTFOUND) on flaky networks or after
+// sleep/wake are also retryable — the lookup usually succeeds on the next try.
 function isRetryableDbError(err) {
   if (!err) return false;
   const code = err.code || err.errno;
-  if (['ECONNRESET', 'ECONNREFUSED', 'ETIMEDOUT', 'EPIPE', '57P01', '08006', '08003', '53300'].includes(code)) {
+  if (['ECONNRESET', 'ECONNREFUSED', 'ETIMEDOUT', 'EPIPE', 'EAI_AGAIN', 'ENOTFOUND', 'EAI_FAIL', '57P01', '08006', '08003', '53300'].includes(code)) {
     return true;
   }
   const msg = String(err.message || '');
-  return /connection terminated|connection timeout|terminated unexpectedly|ECONNRESET/i.test(msg);
+  return /connection terminated|connection timeout|terminated unexpectedly|ECONNRESET|EAI_AGAIN|getaddrinfo/i.test(msg);
 }
 
 async function resetPool() {

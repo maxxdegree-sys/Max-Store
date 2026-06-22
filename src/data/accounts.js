@@ -15,7 +15,7 @@ export const transactions = [
   { id: 't4',  type: 'income',  category: 'Shipping Collected', description: 'Allow-to-open fees (week)',        amount: 2400,  date: '2026-05-16', method: 'COD',          status: 'cleared', reference: '' },
   { id: 't5',  type: 'expense', category: 'Inventory Purchase', description: 'Kitchen appliances restock',       amount: 62000, date: '2026-05-12', method: 'Bank Transfer', status: 'cleared', reference: 'PO-330' },
   { id: 't6',  type: 'expense', category: 'Salaries',           description: 'Staff salaries (May, partial)',    amount: 85000, date: '2026-05-01', method: 'Bank Transfer', status: 'cleared', reference: '' },
-  { id: 't7',  type: 'expense', category: 'Rent',               description: 'Shop rent - Main Bazar',           amount: 45000, date: '2026-05-01', method: 'Cash',          status: 'cleared', reference: '' },
+  { id: 't7',  type: 'expense', category: 'Rent',               description: 'Office rent',                      amount: 45000, date: '2026-05-01', method: 'Cash',          status: 'cleared', reference: '' },
   { id: 't8',  type: 'expense', category: 'Courier / Shipping', description: 'M&P courier settlement',           amount: 9800,  date: '2026-05-14', method: 'Bank Transfer', status: 'cleared', reference: '' },
   { id: 't9',  type: 'expense', category: 'Marketing',          description: 'Facebook + Instagram ads',         amount: 15000, date: '2026-05-10', method: 'JazzCash',      status: 'cleared', reference: '' },
   { id: 't10', type: 'expense', category: 'Packaging',          description: 'Boxes, bubble wrap, tape',         amount: 6200,  date: '2026-05-08', method: 'Cash',          status: 'cleared', reference: '' },

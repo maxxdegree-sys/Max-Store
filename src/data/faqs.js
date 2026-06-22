@@ -90,7 +90,7 @@ export const faqGroups = [
       },
       {
         q: 'Where is Maxx located?',
-        a: 'Our flagship store is near Sherreen Masjid in Main Bazar, Kharian, Punjab. We are open 7 days a week from 10am to 10pm. You can visit us in person or order online for delivery.'
+        a: 'Maxx is an online store based in Kharian, Punjab. We deliver nationwide with cash on delivery — simply order online and we ship to your door.'
       },
       {
         q: 'Do you offer B2B / bulk pricing?',

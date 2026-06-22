@@ -50,9 +50,7 @@ export const stars = (rating = 0) => {
 export const BUSINESS = {
   name:    'Maxx',
   email:   'support@maxxdegree.com',
-  address: 'Near Sherreen Masjid, Main Bazar, Kharian',
   city:    'Kharian',
   region:  'Punjab',
-  country: 'Pakistan',
-  postal:  '50090'
+  country: 'Pakistan'
 };

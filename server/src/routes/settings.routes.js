@@ -18,6 +18,7 @@ const DEFAULT_SITE = {
   homepage: {
     sectionLimit: 8,
     bestSellersMode: 'manual',
+    order: ['categories', 'featured', 'flashSale', 'trending', 'promoBanners', 'newArrivals', 'bestSellers', 'whyChooseUs', 'testimonials', 'newsletter'],
     sections: {
       featured: { enabled: true },
       trending: { enabled: true },

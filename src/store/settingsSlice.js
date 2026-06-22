@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { testimonials as seedTestimonials } from '../data/banners';
+import { DEFAULT_HOME_ORDER } from '../constants/homeBlocks';
 
 // Storefront defaults — used before the API responds (and as an offline fallback).
 const defaultSite = {
@@ -12,6 +13,7 @@ const defaultSite = {
   homepage: {
     sectionLimit: 8,
     bestSellersMode: 'manual',
+    order: DEFAULT_HOME_ORDER,
     sections: {
       featured: { enabled: true },
       trending: { enabled: true },

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import {
-  Facebook, Instagram, Linkedin, Mail, MapPin,
+  Facebook, Instagram, Linkedin, Mail,
   CreditCard, Truck, ShieldCheck, Headphones
 } from 'lucide-react';
 import Logo from '../ui/Logo';
@@ -90,8 +90,7 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-white/10">
-        <div className="container-px py-8 grid md:grid-cols-2 gap-6">
-          <div className="flex items-start gap-3"><MapPin className="text-brand-400 mt-1" size={18} /><div><div className="font-semibold text-sm">Visit our store</div><div className="text-xs text-ink-300">Near Sherreen Masjid, Main Bazar, Kharian, Punjab</div></div></div>
+        <div className="container-px py-8">
           <div className="flex items-start gap-3"><Mail className="text-brand-400 mt-1" size={18} /><div><div className="font-semibold text-sm">Email us</div><a href={`mailto:${BUSINESS.email}`} className="text-xs text-ink-300 hover:text-white">{BUSINESS.email}</a></div></div>
         </div>
       </div>
