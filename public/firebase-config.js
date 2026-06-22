@@ -1,0 +1,1 @@
+self.FIREBASE_CONFIG = {"apiKey":"AIzaSyAkYnbHYjVRZB9Qgf5bgiWq3LK1d1BeamE","authDomain":"maxx-7522a.firebaseapp.com","projectId":"maxx-7522a","storageBucket":"maxx-7522a.firebasestorage.app","messagingSenderId":"819725474948","appId":"1:819725474948:web:38191bae1aac1538b676d1","measurementId":"G-8NJ7CGLR04"};

@@ -1,0 +1,50 @@
+Product Categories
+#	Category	Sub-Categories
+1	Electronics	Mobile Phones, Tablets, Laptops, Cameras, TVs, Audio, Wearables, Gaming, Cables
+2	Home Appliances	Washing Machines, Refrigerators, Air Conditioners, Fans, Irons, Vacuum Cleaners, Water Dispensers
+3	Kitchen Appliances	Blenders, Food Processors, Microwaves, Rice Cookers, Kettles, Toasters, Coffee Makers, Air Fryers
+4	Kitchen & Dining	Cookware, Dinner Sets, Tea Sets, Glassware, Cutlery, Serving Dishes, Storage Containers
+5	Furniture & Home Decor	Sofas, Beds, Tables, Wardrobes, Curtains, Rugs, Wall Art, Lighting
+6	Clothing & Apparel	Men's, Women's, Kids', Ethnic Wear, Activewear, Innerwear, Winterwear
+7	Footwear	Men's Shoes, Women's Shoes, Kids' Shoes, Sandals, Sports Shoes, Formal Shoes
+8	Bags & Luggage	Backpacks, Handbags, Travel Bags, Wallets, School Bags
+9	Beauty & Personal Care	Skincare, Hair Care, Fragrances, Makeup, Shavers, Oral Care, Bath & Body
+10	Health & Wellness	Vitamins, Medical Devices, Fitness Equipment, Eye Care, Personal Safety
+11	Baby & Kids	Baby Clothing, Diapers, Feeding, Strollers, Toys, Kids' Furniture
+12	Toys & Games	Action Figures, Board Games, Puzzles, Outdoor Toys, Educational Toys, RC Toys
+13	Sports & Outdoors	Cricket, Football, Gym & Fitness, Cycling, Swimming, Camping, Sports Clothing
+14	Tools & Hardware	Hand Tools, Power Tools, Electrical Supplies, Plumbing, Safety, Measuring Tools
+15	Automotive	Car Accessories, Bike Accessories, Car Care, Oils & Lubricants, GPS
+16	Books & Stationery	Fiction, Non-Fiction, Academic, Notebooks, Pens, Art Supplies
+17	Office Supplies	Printers, Paper & Files, Desk Accessories, Shredders, Whiteboards
+18	Pet Supplies	Pet Food, Accessories, Grooming, Cages & Kennels
+19	Garden & Outdoor	Plants & Seeds, Garden Tools, Outdoor Furniture, BBQ, Irrigation
+20	Food & Groceries	Dry Goods, Snacks, Beverages, Cooking Oils, Organic Foods
+21	Musical Instruments	Guitars, Keyboards, Drums, Wind Instruments, Studio Equipment
+22	Art & Crafts	Painting, Drawing, Craft Kits, Sewing, Scrapbooking
+23	Software & Gaming	PC Games, Console Games, Antivirus, Gaming Accessories, Gift Cards
+
+
+Commission Slabs — Flat Rate on Full Product Price							
+							
+Note: The applicable slab rate is charged as a flat % on the full product price.							
+							
+Slab #	Price Range	Min Price (Rs.)	Max Price (Rs.)	Commission Rate	Example Price (Rs.)	Commission Charged (Rs.)	Seller Receives (Rs.)
+1	Up to Rs. 499	1	499	10.0%	300	30	270
+2	Rs. 500 – 999	500	999	9.0%	750	68	682
+3	Rs. 1,000 – 4,999	1,000	4,999	8.0%	2,500	200	2,300
+4	Rs. 5,000 – 9,999	5,000	9,999	7.0%	7,500	525	6,975
+5	Rs. 10,000 – 49,999	10,000	49,999	6.0%	25,000	1,500	23,500
+6	Rs. 50,000 – 99,999	50,000	99,999	5.0%	75,000	3,750	71,250
+7	Rs. 100,000 and above	100,000	No limit	2.0%	150,000	3,000	147,000
+
+
+Commission Calculator (Flat Rate)	
+	
+Product Price (Rs.):	2,500
+Applicable Slab	Rs. 1,000–4,999 (8%)
+Flat Commission Rate	8.0%
+Commission Charged	200
+Seller Receives	2,300
+	
+Change the value in B3 to recalculate. Rate is applied as a flat % on the full price.	

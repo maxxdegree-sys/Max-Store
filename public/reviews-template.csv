@@ -1,0 +1,9 @@
+productId,userName,userEmail,rating,title,comment,date,verified,status
+p1,Saima A.,saima@example.com,5,Excellent blender,"Worked perfectly out of the box. Smoothies are silky. Very happy with my purchase.",2026-05-10,true,approved
+p1,Kashif R.,,4,Good value,"Solid build quality and matches photos. Slight delay in shipping but worth it.",2026-05-08,false,approved
+p2,Hira N.,hira@example.com,5,Boils fast,"Boils water in under 3 minutes. Auto-shutoff is a nice safety feature.",2026-05-11,true,approved
+p4,Tanveer S.,,5,Beautiful dinner set,"Used for guests on Eid - everyone asked where I bought it from.",2026-05-09,true,approved
+p7,Noor F.,noor@example.com,5,ANC is amazing,"Noise cancellation works on bus and at the office. Battery lasts the full day.",2026-05-13,true,approved
+p7,Anonymous,,2,Connectivity issues,"Pairing fails on some devices. Sound is fine when it does connect.",2026-05-14,false,pending
+p13,Mehwish A.,,5,Skin glow real,"Two weeks in - my skin is brighter and softer. Worth the price.",2026-05-12,true,approved
+p22,Adeel K.,adeel@example.com,4,Non-stick is genuine,"Eggs slide right off. Heats evenly. Handle stays cool.",2026-05-07,true,approved

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Maxx">
+  <rect width="512" height="512" rx="80" fill="#ffffff"/>
+  <text
+    x="256"
+    y="340"
+    text-anchor="middle"
+    font-family="Arial Black, Impact, 'Segoe UI', sans-serif"
+    font-weight="900"
+    font-size="184"
+    fill="#ff3131"
+    letter-spacing="-12"
+  >MAXX</text>
+  <circle cx="428" cy="92" r="34" fill="none" stroke="#111111" stroke-width="18"/>
+</svg>

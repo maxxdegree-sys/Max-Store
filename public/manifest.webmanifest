@@ -1,0 +1,19 @@
+{
+  "name": "Maxx",
+  "short_name": "Maxx",
+  "description": "Premium online shopping in Kharian, Pakistan.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ff3131",
+  "lang": "en-PK",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "64x64", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icon.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Shop", "url": "/shop" },
+    { "name": "Cart", "url": "/cart" },
+    { "name": "Track Order", "url": "/order-tracking" }
+  ]
+}

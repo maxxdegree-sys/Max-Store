@@ -1,0 +1,18 @@
+# Railway / Nixpacks build config for Al Rafiq Shopping Centre.
+# Builds the website AND installs the backend, then runs one Node service
+# that serves both (Express serves the built dist/ folder + the /api routes).
+
+[phases.setup]
+nixPkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = [
+  "npm install",
+  "npm install --prefix server"
+]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "npm start"

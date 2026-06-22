@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /checkout
+Disallow: /dashboard
+
+Sitemap: https://alrafiq.pk/sitemap.xml
