@@ -249,13 +249,10 @@ r.patch('/orders/:id', async (req, res, next) => {
     let i = 1;
     const add = (col, val) => { sets.push(`${col} = $${i++}`); vals.push(val); };
 
-    const payStatuses = ['Pending', 'Paid', 'Refunded', 'Failed'];
     const delStatuses = ['Placed', 'Processing', 'In Transit', 'Delivered', 'Cancelled', 'Returned'];
 
-    if (d.paymentStatus !== undefined) {
-      if (!payStatuses.includes(d.paymentStatus)) return res.status(400).json({ error: 'Invalid payment status.' });
-      add('payment_status', d.paymentStatus);
-    }
+    // Payment status is admin-only — vendors may only manage delivery/shipping.
+    // Any paymentStatus sent by a vendor is ignored.
     if (d.deliveryStatus !== undefined) {
       if (!delStatuses.includes(d.deliveryStatus)) return res.status(400).json({ error: 'Invalid delivery status.' });
       add('delivery_status', d.deliveryStatus);
@@ -291,7 +288,7 @@ r.patch('/orders/:id', async (req, res, next) => {
       title: `Order ${orderId} update`,
       body: d.deliveryStatus
         ? `Delivery status: ${d.deliveryStatus}${d.tracking ? ` · Tracking: ${d.tracking}` : ''}`
-        : `Payment status: ${d.paymentStatus || existing.payment_status}`,
+        : `Your order ${orderId} has been updated`,
       link: `/track/${orderId}`
     }).catch(() => {});
 

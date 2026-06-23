@@ -4,7 +4,6 @@ import { ShoppingBag, Search, Truck, Save } from 'lucide-react';
 import { vendorOrdersApi, vendorUpdateOrderApi, vendorCouriersApi } from '../../api/client';
 import { formatPKR } from '../../utils/format';
 
-const PAY_STATUSES = ['Pending', 'Paid', 'Refunded', 'Failed'];
 const DEL_STATUSES = ['Placed', 'Processing', 'In Transit', 'Delivered', 'Cancelled', 'Returned'];
 
 export default function VendorOrders() {
@@ -36,7 +35,6 @@ export default function VendorOrders() {
   const startEdit = (o) => {
     setEditing({
       id: o.id,
-      paymentStatus: o.payment_status || 'Pending',
       deliveryStatus: o.delivery_status || 'Processing',
       tracking: o.tracking || '',
       courier: o.courier || '',
@@ -51,7 +49,6 @@ export default function VendorOrders() {
     setSaving(true);
     try {
       const data = await vendorUpdateOrderApi(editing.id, {
-        paymentStatus: editing.paymentStatus,
         deliveryStatus: editing.deliveryStatus,
         tracking: editing.tracking,
         courier: editing.courier,
@@ -75,7 +72,7 @@ export default function VendorOrders() {
       <header className="flex items-center justify-between gap-3 flex-wrap">
         <div>
           <h1 className="text-2xl font-extrabold flex items-center gap-2"><ShoppingBag size={20} className="text-amber-600" /> Orders ({filtered.length})</h1>
-          <p className="text-sm text-ink-500">Manage shipping, tracking and payment collection for orders with your products.</p>
+          <p className="text-sm text-ink-500">Manage shipping, tracking and delivery status for orders with your products. Payment status is set by Maxx admin.</p>
         </div>
         <div className="relative">
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-500" />
@@ -121,19 +118,20 @@ export default function VendorOrders() {
                               <p className="text-xs text-ink-500">Payment method: <b>{o.payment_method || 'COD'}</b></p>
                             </div>
                             <div className="space-y-3">
-                              <div className="text-xs font-semibold text-ink-500 uppercase tracking-wider flex items-center gap-1"><Truck size={14} /> Shipping &amp; payment</div>
+                              <div className="text-xs font-semibold text-ink-500 uppercase tracking-wider flex items-center gap-1"><Truck size={14} /> Shipping &amp; delivery</div>
                               <label className="text-sm block">
                                 <span className="font-semibold text-xs">Delivery status</span>
                                 <select className="input !py-2 !text-sm mt-1" value={editing.deliveryStatus} onChange={(e) => setEditing({ ...editing, deliveryStatus: e.target.value })}>
                                   {DEL_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
                                 </select>
                               </label>
-                              <label className="text-sm block">
+                              <div className="text-sm">
                                 <span className="font-semibold text-xs">Payment status</span>
-                                <select className="input !py-2 !text-sm mt-1" value={editing.paymentStatus} onChange={(e) => setEditing({ ...editing, paymentStatus: e.target.value })}>
-                                  {PAY_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
-                                </select>
-                              </label>
+                                <div className="mt-1 flex items-center gap-2">
+                                  <span className="badge bg-ink-100 dark:bg-white/10 text-ink-700">{o.payment_status || 'Pending'}</span>
+                                  <span className="text-[11px] text-ink-400">Managed by Maxx admin</span>
+                                </div>
+                              </div>
                               <div className="grid grid-cols-2 gap-2">
                                 <label className="text-sm block">
                                   <span className="font-semibold text-xs">Courier</span>

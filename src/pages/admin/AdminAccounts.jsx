@@ -10,9 +10,10 @@ import { INCOME_CATEGORIES, EXPENSE_CATEGORIES } from '../../data/accounts';
 import { selectUser } from '../../store/authSlice';
 import { formatPKR } from '../../utils/format';
 import RequirePermission from '../../components/admin/RequirePermission';
-import { transactionsListApi, transactionCreateApi, transactionDeleteApi, transactionUpdateApi } from '../../api/client';
+import { transactionsListApi, transactionCreateApi, transactionDeleteApi, transactionUpdateApi, ordersListApi, orderUpdateApi } from '../../api/client';
 
 const METHODS = ['Cash', 'Bank Transfer', 'COD', 'JazzCash', 'Easypaisa'];
+const PAY_STATUSES = ['Pending', 'Paid', 'Refunded', 'Failed'];
 const PIE_COLORS = ['#c41e1e', '#e62626', '#ff3131', '#ff5252', '#ff8a8a', '#f59e0b', '#fb7185', '#a78bfa'];
 
 function AdminAccountsInner() {
@@ -22,6 +23,10 @@ function AdminAccountsInner() {
   const [q, setQ] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
   const [adding, setAdding] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [ordersError, setOrdersError] = useState(false);
+  const [payFilter, setPayFilter] = useState('unpaid');
+  const [savingPay, setSavingPay] = useState(null);
 
   const load = () => {
     setLoading(true);
@@ -31,7 +36,32 @@ function AdminAccountsInner() {
       .finally(() => setLoading(false));
   };
 
-  useEffect(() => { load(); }, []);
+  const loadOrders = () => {
+    ordersListApi()
+      .then((data) => { setOrders(data.orders || []); setOrdersError(false); })
+      .catch(() => setOrdersError(true));
+  };
+
+  useEffect(() => { load(); loadOrders(); }, []);
+
+  const changePayStatus = async (id, paymentStatus) => {
+    setSavingPay(id);
+    try {
+      const data = await orderUpdateApi(id, { paymentStatus });
+      setOrders((prev) => prev.map((o) => (o.id === id ? { ...o, ...(data.order || { paymentStatus }) } : o)));
+      toast.success(`Payment marked ${paymentStatus}`);
+      load(); // income/commission auto-posts to the ledger when an order is Paid + shipped
+    } catch (e) {
+      toast.error(e.message || 'Could not update payment status');
+    } finally {
+      setSavingPay(null);
+    }
+  };
+
+  const payOrders = useMemo(() => {
+    const l = payFilter === 'unpaid' ? orders.filter((o) => (o.paymentStatus || 'Pending') !== 'Paid') : orders;
+    return [...l].sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+  }, [orders, payFilter]);
 
   const list = useMemo(() => {
     let l = [...items];
@@ -185,6 +215,55 @@ function AdminAccountsInner() {
             Net profit margin: <b className={totals.net >= 0 ? 'text-brand-700' : 'text-rose-600'}>{margin}%</b>.
             Once pending COD orders clear, projected income becomes <b className="text-ink-700 dark:text-ink-200">{formatPKR(totals.income + totals.receivable)}</b>.
           </div>
+        </div>
+      </div>
+
+      <div className="card overflow-hidden">
+        <div className="flex items-center justify-between gap-3 flex-wrap p-4 border-b border-ink-100 dark:border-white/10">
+          <div>
+            <h3 className="font-bold flex items-center gap-2"><Wallet size={16} className="text-brand-700" /> Order Payments</h3>
+            <p className="text-xs text-ink-500">Set an order’s payment status. Marking a shipped order <b>Paid</b> posts its income &amp; commission to the ledger automatically.</p>
+          </div>
+          <div className="flex items-center gap-2">
+            {[['unpaid', 'Unpaid'], ['all', 'All']].map(([k, l]) => (
+              <button key={k} onClick={() => setPayFilter(k)} className={`px-3 py-1.5 rounded-full text-xs font-semibold border ${payFilter === k ? 'bg-brand-500 text-white border-transparent' : 'bg-white dark:bg-ink-900 border-ink-200 dark:border-white/10 hover:border-brand-300'}`}>{l}</button>
+            ))}
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          {ordersError ? (
+            <div className="p-6 text-sm text-ink-500">You need the <b>Orders</b> permission to manage order payments here.</div>
+          ) : payOrders.length === 0 ? (
+            <div className="p-6 text-sm text-ink-500">{payFilter === 'unpaid' ? 'No unpaid orders. 🎉' : 'No orders yet.'}</div>
+          ) : (
+            <table className="w-full text-sm">
+              <thead className="bg-ink-100/60 dark:bg-white/5 text-left">
+                <tr>{['Order #', 'Date', 'Customer', 'Total', 'Method', 'Delivery', 'Payment'].map((h) => <th key={h} className="px-4 py-3 text-xs uppercase tracking-wider font-bold text-ink-500">{h}</th>)}</tr>
+              </thead>
+              <tbody>
+                {payOrders.map((o) => (
+                  <tr key={o.id} className="border-t border-ink-100 dark:border-white/10 hover:bg-ink-100/40 dark:hover:bg-white/5">
+                    <td className="px-4 py-3 font-mono text-xs">{o.id}</td>
+                    <td className="px-4 py-3 text-ink-500 whitespace-nowrap">{(o.createdAt || '').slice(0, 10)}</td>
+                    <td className="px-4 py-3">{o.customerName || '-'}</td>
+                    <td className="px-4 py-3 font-semibold whitespace-nowrap">{formatPKR(o.total || 0)}</td>
+                    <td className="px-4 py-3 text-ink-500 whitespace-nowrap">{o.paymentMethod || 'COD'}</td>
+                    <td className="px-4 py-3"><span className="badge bg-ink-100 dark:bg-white/10 text-ink-700">{o.deliveryStatus || '-'}</span></td>
+                    <td className="px-4 py-3">
+                      <select
+                        className="input !py-1.5 !text-sm !w-auto"
+                        value={o.paymentStatus || 'Pending'}
+                        disabled={savingPay === o.id}
+                        onChange={(e) => changePayStatus(o.id, e.target.value)}
+                      >
+                        {PAY_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
+                      </select>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
 
