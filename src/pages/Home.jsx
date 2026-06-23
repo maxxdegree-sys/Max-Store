@@ -31,7 +31,7 @@ export default function Home() {
     newsletter:   () => <Newsletter />,
     featured: () => sections.featured?.enabled !== false && (
       <ProductRow
-        eyebrow="Hand-picked"
+        eyebrow="Top Picks"
         title="Featured Products"
         subtitle="Our editors' top picks this week."
         products={featured}

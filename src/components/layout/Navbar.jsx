@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
@@ -35,6 +35,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [catOpen, setCatOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const cartCount = useSelector(selectCartCount);
   const wishCount = useSelector(selectWishlistCount);
@@ -62,6 +63,10 @@ export default function Navbar() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [catOpen]);
+
+  // Close the categories dropdown on any navigation (covers clicking a category,
+  // browser back/forward, or re-clicking the current route).
+  useEffect(() => { setCatOpen(false); }, [location.pathname, location.search]);
 
   const suggestions = useMemo(() => {
     if (!query.trim()) return [];
@@ -97,9 +102,6 @@ export default function Navbar() {
 
           <Link to="/" className="flex items-center gap-2 shrink-0 min-w-0">
             <Logo className="h-10 w-10 shrink-0" />
-            <div className="hidden md:block leading-tight min-w-0">
-              <DeliveryLocationButton compact className="!text-ink-500 hover:!text-brand-700 max-w-[140px]" />
-            </div>
           </Link>
 
           <div className="hidden lg:block">
@@ -212,7 +214,7 @@ export default function Navbar() {
         </div>
 
         <nav className="hidden lg:flex items-center gap-6 h-11 border-t border-ink-100 dark:border-white/10">
-          {navLinks.map((l) => (
+          {navLinks.filter((l) => l.to !== '/categories').map((l) => (
             <NavLink
               key={l.to}
               to={l.to}

@@ -9,10 +9,15 @@ export default function PromoBanners() {
   const [banners, setBanners] = useState(FALLBACK);
 
   useEffect(() => {
+    // Once the API responds, use exactly what it returns — including an empty
+    // list, so admins can clear the row by deleting/hiding all promo banners.
+    // FALLBACK stays only as the pre-load / offline default.
     bannersPublicApi('promo')
-      .then((d) => { if (Array.isArray(d?.banners) && d.banners.length) setBanners(d.banners); })
+      .then((d) => { if (Array.isArray(d?.banners)) setBanners(d.banners); })
       .catch(() => {});
   }, []);
+
+  if (!banners.length) return null;
 
   return (
     <section className="container-px py-10 sm:py-14">
