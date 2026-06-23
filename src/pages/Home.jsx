@@ -65,6 +65,7 @@ export default function Home() {
   };
 
   const order = resolveHomeOrder(hp.order);
+  const hidden = Array.isArray(hp.hidden) ? hp.hidden : [];
 
   return (
     <>
@@ -75,6 +76,7 @@ export default function Home() {
       />
       <HeroSlider />
       {order.map((key) => {
+        if (hidden.includes(key)) return null;
         const render = blocks[key];
         return render ? <div key={key}>{render()}</div> : null;
       })}

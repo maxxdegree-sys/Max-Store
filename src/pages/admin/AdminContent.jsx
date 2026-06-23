@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
-import { Plus, Trash2, Save, Megaphone, Quote, Flame, BarChart3, LayoutGrid, ChevronUp, ChevronDown } from 'lucide-react';
+import { Plus, Trash2, Save, Megaphone, Quote, Flame, BarChart3, LayoutGrid, ChevronUp, ChevronDown, Eye, EyeOff } from 'lucide-react';
 import { siteSettingsApi, siteSettingsSaveApi } from '../../api/client';
 import { setSiteSettings } from '../../store/settingsSlice';
 import { STOREFRONT_TAGS } from '../../constants/storefrontTags';
@@ -56,6 +56,24 @@ export default function AdminContent() {
     const next = [...homeOrder];
     [next[index], next[target]] = [next[target], next[index]];
     patchHomepage({ order: next });
+  };
+
+  // Per-section visibility. Product rows already store visibility in
+  // sections[key].enabled (kept in sync with the checkboxes above); every
+  // other block uses the homepage.hidden list.
+  const PRODUCT_ROW_KEYS = ['featured', 'trending', 'newArrivals', 'bestSellers'];
+  const hiddenList = Array.isArray(homepage.hidden) ? homepage.hidden : [];
+  const isBlockHidden = (key) => PRODUCT_ROW_KEYS.includes(key)
+    ? hpSections[key]?.enabled === false
+    : hiddenList.includes(key);
+  const toggleBlockHidden = (key) => {
+    if (PRODUCT_ROW_KEYS.includes(key)) {
+      // new enabled = whatever makes it the opposite of current hidden state
+      patchHpSection(key, 'enabled', isBlockHidden(key));
+    } else {
+      const next = hiddenList.includes(key) ? hiddenList.filter((k) => k !== key) : [...hiddenList, key];
+      patchHomepage({ hidden: next });
+    }
   };
 
   const save = async () => {
@@ -160,17 +178,26 @@ export default function AdminContent() {
           ))}
         </div>
         <div>
-          <div className="font-semibold text-sm mb-1">Section order</div>
-          <p className="text-xs text-ink-500 mb-2">Use the arrows to set the order sections appear on the homepage (top = first). The hero banner always stays at the top. Disabled product rows are skipped automatically.</p>
+          <div className="font-semibold text-sm mb-1">Section order &amp; visibility</div>
+          <p className="text-xs text-ink-500 mb-2">Use the arrows to set the order sections appear on the homepage (top = first), and the eye icon to hide any section. The hero banner always stays at the top.</p>
           <ul className="space-y-1">
-            {homeOrder.map((key, i) => (
-              <li key={key} className="flex items-center gap-2 rounded-lg border border-ink-100 dark:border-white/10 p-2">
-                <span className="grid place-items-center w-6 h-6 rounded bg-brand-50 text-brand-700 text-xs font-bold">{i + 1}</span>
-                <span className="text-sm font-medium flex-1">{blockLabel[key] || key}</span>
-                <button type="button" onClick={() => moveBlock(i, -1)} disabled={i === 0} className="btn-ghost !p-1.5 disabled:opacity-30" aria-label="Move up"><ChevronUp size={16} /></button>
-                <button type="button" onClick={() => moveBlock(i, 1)} disabled={i === homeOrder.length - 1} className="btn-ghost !p-1.5 disabled:opacity-30" aria-label="Move down"><ChevronDown size={16} /></button>
-              </li>
-            ))}
+            {homeOrder.map((key, i) => {
+              const hidden = isBlockHidden(key);
+              return (
+                <li key={key} className={`flex items-center gap-2 rounded-lg border border-ink-100 dark:border-white/10 p-2 ${hidden ? 'opacity-60' : ''}`}>
+                  <span className="grid place-items-center w-6 h-6 rounded bg-brand-50 text-brand-700 text-xs font-bold">{i + 1}</span>
+                  <span className="text-sm font-medium flex-1 flex items-center gap-2">
+                    {blockLabel[key] || key}
+                    {hidden && <span className="badge bg-ink-100 dark:bg-white/10 text-ink-500">Hidden</span>}
+                  </span>
+                  <button type="button" onClick={() => toggleBlockHidden(key)} className="btn-ghost !p-1.5" aria-label={hidden ? 'Show section' : 'Hide section'} title={hidden ? 'Show section' : 'Hide section'}>
+                    {hidden ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                  <button type="button" onClick={() => moveBlock(i, -1)} disabled={i === 0} className="btn-ghost !p-1.5 disabled:opacity-30" aria-label="Move up"><ChevronUp size={16} /></button>
+                  <button type="button" onClick={() => moveBlock(i, 1)} disabled={i === homeOrder.length - 1} className="btn-ghost !p-1.5 disabled:opacity-30" aria-label="Move down"><ChevronDown size={16} /></button>
+                </li>
+              );
+            })}
           </ul>
         </div>
         <div className="text-xs text-ink-500 space-y-1">
