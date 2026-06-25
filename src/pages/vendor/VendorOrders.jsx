@@ -87,7 +87,7 @@ export default function VendorOrders() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead className="bg-ink-100/60 dark:bg-white/5 text-left">
-                <tr>{['Order #', 'Date', 'Customer', 'Items', 'Total', 'Payment', 'Delivery', ''].map((h) => <th key={h} className="px-4 py-3 text-xs uppercase tracking-wider font-bold text-ink-500">{h}</th>)}</tr>
+                <tr>{['Order #', 'Date', 'Customer', 'Items', 'Total', 'Delivery', ''].map((h) => <th key={h} className="px-4 py-3 text-xs uppercase tracking-wider font-bold text-ink-500">{h}</th>)}</tr>
               </thead>
               <tbody>
                 {filtered.map((o) => (
@@ -98,7 +98,6 @@ export default function VendorOrders() {
                       <td className="px-4 py-3">{o.customer_name || '-'}</td>
                       <td className="px-4 py-3">{o.items?.length || 0}</td>
                       <td className="px-4 py-3 font-semibold">{formatPKR(o.total || 0)}</td>
-                      <td className="px-4 py-3"><span className="badge bg-ink-100 text-ink-700">{o.payment_status || '-'}</span></td>
                       <td className="px-4 py-3"><span className="badge bg-ink-100 text-ink-700">{o.delivery_status || '-'}</span></td>
                       <td className="px-4 py-3">
                         <button type="button" onClick={() => startEdit(o)} className="btn-outline !py-1.5 !px-3 text-xs"><Truck size={13} /> Manage</button>
@@ -106,7 +105,7 @@ export default function VendorOrders() {
                     </tr>
                     {open === o.id && editing?.id === o.id && (
                       <tr>
-                        <td colSpan={8} className="px-4 py-4 bg-ink-50 dark:bg-white/5 border-t border-ink-100 dark:border-white/10">
+                        <td colSpan={7} className="px-4 py-4 bg-ink-50 dark:bg-white/5 border-t border-ink-100 dark:border-white/10">
                           <div className="grid md:grid-cols-2 gap-4">
                             <div>
                               <div className="text-xs font-semibold mb-2 text-ink-500 uppercase tracking-wider">Your items</div>
@@ -115,7 +114,6 @@ export default function VendorOrders() {
                                   <li key={i}>{it.name} × {it.qty} — {formatPKR(it.subtotal)}</li>
                                 ))}
                               </ul>
-                              <p className="text-xs text-ink-500">Payment method: <b>{o.payment_method || 'COD'}</b></p>
                             </div>
                             <div className="space-y-3">
                               <div className="text-xs font-semibold text-ink-500 uppercase tracking-wider flex items-center gap-1"><Truck size={14} /> Shipping &amp; delivery</div>
@@ -125,13 +123,6 @@ export default function VendorOrders() {
                                   {DEL_STATUSES.map((s) => <option key={s} value={s}>{s}</option>)}
                                 </select>
                               </label>
-                              <div className="text-sm">
-                                <span className="font-semibold text-xs">Payment status</span>
-                                <div className="mt-1 flex items-center gap-2">
-                                  <span className="badge bg-ink-100 dark:bg-white/10 text-ink-700">{o.payment_status || 'Pending'}</span>
-                                  <span className="text-[11px] text-ink-400">Managed by Maxx admin</span>
-                                </div>
-                              </div>
                               <div className="grid grid-cols-2 gap-2">
                                 <label className="text-sm block">
                                   <span className="font-semibold text-xs">Courier</span>

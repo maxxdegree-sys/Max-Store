@@ -72,8 +72,8 @@ export default function HeroSlider() {
               </motion.div>
             </div>
 
-            {/* Image */}
-            <div className="relative">
+            {/* Image — full-bleed background on mobile (behind content), grid column on md+ */}
+            <div className="absolute inset-0 md:relative md:inset-auto">
               <img
                 src={banner.image}
                 alt={banner.title}
