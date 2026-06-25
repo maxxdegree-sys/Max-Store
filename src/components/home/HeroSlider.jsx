@@ -38,7 +38,7 @@ export default function HeroSlider() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.6 }}
-            className="relative grid md:grid-cols-2 min-h-[320px] sm:min-h-[420px] lg:min-h-[480px]"
+            className="relative flex flex-col-reverse md:grid md:grid-cols-2 md:min-h-[420px] lg:min-h-[480px]"
           >
             {/* Content */}
             <div className="relative z-10 p-6 sm:p-10 lg:p-14 flex flex-col justify-center">
@@ -72,15 +72,14 @@ export default function HeroSlider() {
               </motion.div>
             </div>
 
-            {/* Image — full-bleed background on mobile (behind content), grid column on md+ */}
-            <div className="absolute inset-0 md:relative md:inset-auto">
+            {/* Image — visible band on top on mobile, side column on md+ */}
+            <div className="relative h-52 sm:h-72 md:h-auto">
               <img
                 src={banner.image}
                 alt={banner.title}
                 className="absolute inset-0 h-full w-full object-cover"
                 loading="eager"
               />
-              <div className="absolute inset-0 bg-gradient-to-r from-white via-white/60 to-transparent dark:from-ink-900 dark:via-ink-900/40 md:hidden" />
             </div>
             {banner.badge && (
               <div className="absolute right-4 top-4 sm:right-6 sm:top-6">
